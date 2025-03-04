@@ -338,7 +338,8 @@ EOF
 		exit 1
 	fi
 
-	S3CMD_CMD=("${S3CMD}" --config "$S3CMD_CONFIG_FILE")
+	# ADDED A `-d` (DEBUG) FLAG TO ALSO LOG DEBUG MESSAGES
+	S3CMD_CMD=("${S3CMD}" -d --config "$S3CMD_CONFIG_FILE")
 
 	if [ ! -e "$FILE_1_MB" ]; then
 		shred -n 1 -s 1MB - >"$FILE_1_MB"

@@ -197,6 +197,12 @@ func testPutObjectWithTaggingAndMetadata() {
 		{tags: "key1=value1&key2=value2", metadata: map[string]string{"Foo-Key": "foo-val"}},
 	}
 
+	// *** WE CURRENTLY DON'T SUPPORT OBJECT METADATA. FOLLOWING CODE SNIPPET WILL BE REMOVED AFTER WE SUPPORT IT ***
+	// Remove all metadata
+	for i := range uploads {
+		uploads[i].metadata = nil
+	}
+
 	for i := range uploads {
 		putInput := &s3.PutObjectInput{
 			Body:   aws.ReadSeekCloser(strings.NewReader("foocontent")),

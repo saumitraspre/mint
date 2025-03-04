@@ -261,24 +261,32 @@ func testLockingLegalhold() {
 		Key:                       aws.String(object),
 		ObjectLockLegalHoldStatus: aws.String("test"),
 	}
-	output, err := s3Client.PutObject(putInput)
-	if err != nil {
-		failureLog(function, args, startTime, "", fmt.Sprintf("PUT expected to succeed but got %v", err), err).Fatal()
-		return
-	}
-	uploads[0].versionId = *output.VersionId
+	_, err = s3Client.PutObject(putInput)
+	// THE BELOW CHECK IS INCORRECT. VALID VALUES FOR ObjectLockLegalHoldStatus ARE ON and OFF.
+	// if err != nil {
+	// 	failureLog(function, args, startTime, "", fmt.Sprintf("PUT expected to succeed but got %v", err), err).Fatal()
+	// 	return
+	// }
+	// uploads[0].versionId = *output.VersionId
 
-	polhInput := &s3.PutObjectLegalHoldInput{
-		Bucket:    aws.String(bucket),
-		Key:       aws.String(object),
-		VersionId: aws.String(uploads[0].versionId),
-	}
-	// We encountered an internal error, please try again.: cause(EOF)
-	_, err = s3Client.PutObjectLegalHold(polhInput)
+	//This is the correct test.
 	if err == nil {
-		failureLog(function, args, startTime, "", fmt.Sprintf("PutObjectLegalHold expected to fail but got %v", err), err).Fatal()
+		failureLog(function, args, startTime, "", fmt.Sprintf("PUT expected to fail but got %v", err), err).Fatal()
 		return
 	}
+	
+	// PREVIOUS CHANGE MAKES THIS TEST INVALID
+	// polhInput := &s3.PutObjectLegalHoldInput{
+	// 	Bucket:    aws.String(bucket),
+	// 	Key:       aws.String(object),
+	// 	VersionId: aws.String(uploads[0].versionId),
+	// }
+	// // We encountered an internal error, please try again.: cause(EOF)
+	// _, err = s3Client.PutObjectLegalHold(polhInput)
+	// if err == nil {
+	// 	failureLog(function, args, startTime, "", fmt.Sprintf("PutObjectLegalHold expected to fail but got %v", err), err).Fatal()
+	// 	return
+	// }
 
 	successLogger(function, args, startTime).Info()
 }
