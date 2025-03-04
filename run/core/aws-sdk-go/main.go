@@ -750,6 +750,8 @@ func testObjectTaggingErrors(s3Client *s3.S3) {
 	}
 
 	if aerr, ok := err.(awserr.Error); ok {
+		// *** `aerr.Message()` RETURNS `Error_Code:Error Message` ON S3. BUT IN OUR CASE, WE RETURN `Error_Code:Error Message\n Response code` ***
+		// *** HENCE, CHANGING THE STRICT EQUALITY CONSTRAINT TO A `strings.Contains()` CONSTRAINT*** 
 		if aerr.Code() != "InvalidTag" && strings.Contains(aerr.Message(), "InvalidTag: Cannot provide multiple Tags with the same key") {
 			failureLog(function, args, startTime, "", fmt.Sprintf("AWS SDK Go PUT expected to fail but got %v", err), err).Fatal()
 			return
