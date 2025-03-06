@@ -934,7 +934,7 @@ func testListMultipartUploads(s3Client *s3.S3) {
 		UploadId: multipartUpload.UploadId,
 	})
 	if errParts != nil {
-		failureLog(function, args, startTime, "", "AWS SDK Go ListPartsInput API failed for", err).Fatal()
+		failureLog(function, args, startTime, "", "AWS SDK Go ListPartsInput API failed for", errParts).Fatal()
 		return
 	}
 
@@ -977,27 +977,25 @@ func testListMultipartUploads(s3Client *s3.S3) {
 	// Error cases
 
 	// MaxParts < 0
-	// *** DISABLING THESE TESTS FOR NOW, WILL BE ENABLED WHEN PAGINATION SUPPORT IS ADDED TO LISTING MP UPLOADS ***
-	
-	// lpInput := &s3.ListPartsInput{
-	// 	Bucket:   aws.String(bucket),
-	// 	Key:      aws.String(object),
-	// 	UploadId: multipartUpload.UploadId,
-	// 	MaxParts: aws.Int64(-1),
-	// }
-	// listParts, err = s3Client.ListParts(lpInput)
-	// if err == nil {
-	// 	failureLog(function, args, startTime, "", "AWS SDK Go ListPartsInput API (MaxParts < 0) failed for", err).Fatal()
-	// 	return
-	// }
+	lpInput := &s3.ListPartsInput{
+		Bucket:   aws.String(bucket),
+		Key:      aws.String(object),
+		UploadId: multipartUpload.UploadId,
+		MaxParts: aws.Int64(-1),
+	}
+	listParts, err = s3Client.ListParts(lpInput)
+	if err == nil {
+		failureLog(function, args, startTime, "", "AWS SDK Go ListPartsInput API (MaxParts < 0) failed for", err).Fatal()
+		return
+	}
 
-	// PartNumberMarker < 0
-	// lpInput.PartNumberMarker = aws.Int64(-1)
-	// listParts, err = s3Client.ListParts(lpInput)
-	// if err == nil {
-	// 	failureLog(function, args, startTime, "", "AWS SDK Go ListPartsInput API (PartNumberMarker < 0) failed for", err).Fatal()
-	// 	return
-	// }
+	//PartNumberMarker < 0
+	lpInput.PartNumberMarker = aws.Int64(-1)
+	listParts, err = s3Client.ListParts(lpInput)
+	if err == nil {
+		failureLog(function, args, startTime, "", "AWS SDK Go ListPartsInput API (PartNumberMarker < 0) failed for", err).Fatal()
+		return
+	}
 
 	successLogger(function, args, startTime).Info()
 }
