@@ -34,9 +34,10 @@ cd "$TMPDIR"
 	die "Unable to install botocore.."
 
 # Download and install aws cli
-(git clone --depth 1 -b 1.29.37 https://github.com/aws/aws-cli &&
-	cd aws-cli &&
-	python3 -m pip install .) ||
+# UPGRADED AWSCLI TO USE LATEST VERSION
+(curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
+unzip awscliv2.zip &&
+./aws/install) ||
 	die "Unable to install aws-cli.."
 
 # Clean-up
