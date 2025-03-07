@@ -1196,7 +1196,7 @@ function test_list_objects_error() {
 		out=$($function 2>&1)
 		rv=$?
 		# AS PER  https://awscli.amazonaws.com/v2/documentation/api/latest/topic/return-codes.html 254 IS AN APPROPRIATE ERROR CODE COMPARED TO
-		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIEF ERROR
+		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIED ERROR
 		if [ $rv -ne 254 ]; then
 			rv=1
 		else
@@ -1211,7 +1211,7 @@ function test_list_objects_error() {
 		out=$($function 2>&1)
 		rv=$?
 		# AS PER  https://awscli.amazonaws.com/v2/documentation/api/latest/topic/return-codes.html 254 IS AN APPROPRIATE ERROR CODE COMPARED TO
-		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIEF ERROR
+		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIED ERROR
 		if [ $rv -ne 254 ]; then
 			rv=1
 		else
@@ -1255,19 +1255,19 @@ function test_put_object_error() {
 	rv=$?
 
 	# if make bucket succeeds upload an object without content-md5.
-	# WE CURRENTLY DON'T HAVE OBJECT INTEGRITY SUPPORT. DISABLING THIS TEST FOR NOW.
-	# if [ $rv -eq 0 ]; then
-	# 	function="${AWS} s3api put-object --body ${MINT_DATA_DIR}/datafile-1-kB --bucket ${bucket_name} --key datafile-1-kB --content-md5 invalid"
-	# 	test_function=${function}
-	# 	out=$($function 2>&1)
-	# 	rv=$?
-	# 	echo $rv
-	# 	if [ $rv -ne 255 ]; then
-	# 		rv=1
-	# 	else
-	# 		rv=0
-	# 	fi
-	# fi
+	if [ $rv -eq 0 ]; then
+		function="${AWS} s3api put-object --body ${MINT_DATA_DIR}/datafile-1-kB --bucket ${bucket_name} --key datafile-1-kB --content-md5 invalid"
+		test_function=${function}
+		out=$($function 2>&1)
+		rv=$?
+		# AS PER  https://awscli.amazonaws.com/v2/documentation/api/latest/topic/return-codes.html 254 IS AN APPROPRIATE ERROR CODE COMPARED TO
+		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIED ERROR
+		if [ $rv -ne 254 ]; then
+			rv=1
+		else
+			rv=0
+		fi
+	fi
 
 	# upload an object without content-length.
 	if [ $rv -eq 0 ]; then
@@ -1276,7 +1276,7 @@ function test_put_object_error() {
 		out=$($function 2>&1)
 		rv=$?
 		# AS PER  https://awscli.amazonaws.com/v2/documentation/api/latest/topic/return-codes.html 254 IS AN APPROPRIATE ERROR CODE COMPARED TO
-		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIEF ERROR
+		# 255. THE COMMAND EXECUTION SHOULD SUCCEED AND RETURN WITH A SPECIFIC FAILURE, RATHER THAN RETURNING WITH AN UNSPECIFIED ERROR
 		if [ $rv -ne 254 ]; then
 			rv=1
 		else
