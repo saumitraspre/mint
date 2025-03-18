@@ -863,4 +863,6 @@ aws.copyObjectTest(data_dir, file_name1)
 aws.copyObjectTest(data_dir, file_name1, file_new_name)
 aws.presignedGetObjectTest(data_dir, file_name1)
 aws.presignedPutObjectTest(data_dir, file_name1)
-aws.presignedPostObjectTest(data_dir, file_name1, 60, 3*1024*1024)
+# COMMENTING OUT THIS TEST SINCE WE CURRENTLY DON'T SUPPORT PRESIGNED 
+# POST REQUESTS AT ALL IN OUR OBJECT STORE
+# aws.presignedPostObjectTest(data_dir, file_name1, 60, 3*1024*1024)
